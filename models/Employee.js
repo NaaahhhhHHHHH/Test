@@ -5,7 +5,7 @@ const EmployeeSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: true, unique: true },
   branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: true },
-  image: { type: String },
+  profileImage: { type: String },
 });
 
 module.exports = mongoose.model('Employee', EmployeeSchema);
