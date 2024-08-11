@@ -7,9 +7,9 @@ const {
   deleteService
 } = require('../controllers/servicesController');
 
-router.post('/', createService);
-router.get('/', getAllServices);
-router.put('/:id', updateService);
-router.delete('/:id', deleteService);
+router.post('/api/services', createService);
+router.get('/api/services', getAllServices);
+router.put('/api/services/:id', updateService);
+router.delete('/api/services/:id', deleteService);
 
 module.exports = router;

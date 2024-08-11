@@ -3,6 +3,24 @@ const User = require('../models/User');
 const Customer = require('../models/Customer');
 
 exports.createAppointment = async (req, res) => {
+  // #swagger.tags = ['appointment']
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                userId: "",
+                name: "",
+                email: "",
+                phoneNumber: "",
+                service: "",
+                employee: "",
+                branch: "",
+                timeslot: "",
+            }
+        }
+  */
   try {
     const { userId, name, email, phoneNumber, service, employee, branch, timeslot } = req.body;
     let customer;
@@ -51,8 +69,18 @@ exports.createAppointment = async (req, res) => {
 };
 
 exports.getAllAppointments = async (req, res) => {
+  // #swagger.tags = ['appointment']
   try {
-    const appointments = await Appointment.find().populate('service employee branch');
+    const { userId, service, employee, phoneNumber, name, branch, timeslot } = req.query;
+    const filter = {};
+    if (userId) filter.userId = userId;
+    if (name) filter.name = new RegExp(name, 'i');
+    if (service) filter.service = service;
+    if (employee) filter.employee = employee;
+    if (branch) filter.branch = branch;
+    if (timeslot) filter.timeslot = timeslot;
+    if (phoneNumber) filter.phoneNumber = phoneNumber;
+    const appointments = await Appointment.find(filter).populate('service employee branch');
     res.status(200).json(appointments);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -60,6 +88,24 @@ exports.getAllAppointments = async (req, res) => {
 };
 
 exports.updateAppointment = async (req, res) => {
+  // #swagger.tags = ['appointment']
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                userId: "",
+                name: "",
+                email: "",
+                phoneNumber: "",
+                service: "",
+                employee: "",
+                branch: "",
+                timeslot: "",
+            }
+        }
+  */
   try {
     const { customerId, name, email, phoneNumber, service, employee, branch, timeslot } = req.body;
     const appointment = await Appointment.findByIdAndUpdate(req.params.id, { customer: customerId, name, email, phoneNumber, service: service, employee: employee, branch: branch, timeslot }, { new: true });
@@ -75,6 +121,7 @@ exports.updateAppointment = async (req, res) => {
 };
 
 exports.deleteAppointment = async (req, res) => {
+  // #swagger.tags = ['appointment']
   try {
     const appointment = await Appointment.findByIdAndDelete(req.params.id);
 

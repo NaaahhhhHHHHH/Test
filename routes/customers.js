@@ -7,9 +7,9 @@ const {
   deleteCustomer
 } = require('../controllers/customersController');
 
-router.post('/', createCustomer);
-router.get('/', getAllCustomers);
-router.put('/:id', updateCustomer);
-router.delete('/:id', deleteCustomer);
+router.post('/api/customers', createCustomer);
+router.get('/api/customers', getAllCustomers);
+router.put('/api/customers/:id', updateCustomer);
+router.delete('/api/customers/:id', deleteCustomer);
 
 module.exports = router;

@@ -7,9 +7,9 @@ const {
   deleteBranch
 } = require('../controllers/branchesController');
 
-router.post('/', createBranch); 
-router.get('/', getAllBranches);
-router.put('/:id', updateBranch); 
-router.delete('/:id', deleteBranch); 
+router.post('/api/branches', createBranch); 
+router.get('/api/branches', getAllBranches);
+router.put('/api/branches/:id', updateBranch); 
+router.delete('/api/branches/:id', deleteBranch); 
 
 module.exports = router;

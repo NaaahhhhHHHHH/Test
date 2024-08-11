@@ -7,9 +7,9 @@ const {
   deleteAbout
 } = require('../controllers/aboutController');
 
-router.post('/', createAbout);
-router.get('/', getAllAbout);
-router.put('/:id', updateAbout);
-router.delete('/:id', deleteAbout);
+router.post('/api/about', createAbout);
+router.get('/api/about', getAllAbout);
+router.put('/api/about/:id', updateAbout);
+router.delete('/api/about/:id', deleteAbout);
 
 module.exports = router;

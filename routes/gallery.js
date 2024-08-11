@@ -7,9 +7,9 @@ const {
   deleteGalleryItem
 } = require('../controllers/galleryController');
 
-router.post('/', createGalleryItem);
-router.get('/', getAllGalleryItems);
-router.put('/:id', updateGalleryItem);
-router.delete('/:id', deleteGalleryItem);
+router.post('/api/gallery', createGalleryItem);
+router.get('/api/gallery', getAllGalleryItems);
+router.put('/api/gallery/:id', updateGalleryItem);
+router.delete('/api/gallery/:id', deleteGalleryItem);
 
 module.exports = router;

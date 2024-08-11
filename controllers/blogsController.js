@@ -2,6 +2,21 @@ const Blog = require('../models/Blog');
 
 // Create a new blog
 exports.createBlog = async (req, res) => {
+  // #swagger.tags = ['blog']
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                title: "",
+                content: "",
+                author: "",
+                date: "",
+                image: "",
+            }
+        }
+  */
   try {
     const newBlog = new Blog(req.body);
     const blog = await newBlog.save();
@@ -13,6 +28,7 @@ exports.createBlog = async (req, res) => {
 
 // Get all blogs
 exports.getAllBlogs = async (req, res) => {
+  // #swagger.tags = ['blog']
   try {
     const blogs = await Blog.find();
     res.status(200).json(blogs);
@@ -23,6 +39,21 @@ exports.getAllBlogs = async (req, res) => {
 
 // Update a blog
 exports.updateBlog = async (req, res) => {
+  // #swagger.tags = ['blog']
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                title: "",
+                content: "",
+                author: "",
+                date: "",
+                image: "",
+            }
+        }
+  */
   try {
     const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json(blog);
@@ -33,6 +64,7 @@ exports.updateBlog = async (req, res) => {
 
 // Delete a blog
 exports.deleteBlog = async (req, res) => {
+  // #swagger.tags = ['blog']
   try {
     await Blog.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Blog deleted' });

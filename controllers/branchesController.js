@@ -1,6 +1,22 @@
 const Branch = require('../models/Branch');
 
 exports.createBranch = async (req, res) => {
+  // #swagger.tags = ['branches']
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                name: "",
+                address: "",
+                phoneNumber: "",
+                email: "",
+                openingHours: "",
+                url: "",
+            }
+        }
+  */
   try {
     const { name, address, phoneNumber, email, openingHours, image } = req.body;
 
@@ -14,6 +30,7 @@ exports.createBranch = async (req, res) => {
 };
 
 exports.getAllBranches = async (req, res) => {
+  // #swagger.tags = ['branches']
   try {
     const branches = await Branch.find();
     res.status(200).json(branches);
@@ -23,6 +40,22 @@ exports.getAllBranches = async (req, res) => {
 };
 
 exports.updateBranch = async (req, res) => {
+  // #swagger.tags = ['branches']
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                name: "",
+                address: "",
+                phoneNumber: "",
+                email: "",
+                openingHours: "",
+                url: "",
+            }
+        }
+  */
   try {
     const { name, address, phoneNumber, email, openingHours, image } = req.body;
     const branch = await Branch.findByIdAndUpdate(req.params.id, { name, address, phoneNumber, email, openingHours, image }, { new: true });
@@ -38,6 +71,7 @@ exports.updateBranch = async (req, res) => {
 };
 
 exports.deleteBranch = async (req, res) => {
+  // #swagger.tags = ['branches']
   try {
     const branch = await Branch.findByIdAndDelete(req.params.id);
 

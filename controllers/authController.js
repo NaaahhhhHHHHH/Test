@@ -4,8 +4,27 @@ const bcrypt = require('bcryptjs');
 const Customer = require('../models/Customer');
 
 exports.register = async (req, res) => {
+  // #swagger.tags = ['auth']
+  // #swagger.summary = 'register new account'
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                username: "",
+                name: "",
+                email: "",
+                password: "",
+                phoneNumber: "",
+                address: "",
+                profileImage: "",
+                role: "",
+            }
+        }
+  */
     try {
-      const { username, name, email, password, phoneNumber } = req.body;
+      const { username, name, email, password, phoneNumber, role } = req.body;
   
       const existingUser = await User.findOne({ $or: [{ username }, { email }] });
       if (existingUser) {
@@ -18,19 +37,20 @@ exports.register = async (req, res) => {
         email,
         password,
         phoneNumber,
+        role
       });
       await newUser.save();
-  
-      let customer = await Customer.findOne({ email });
-      if (!customer) {
-        customer = new Customer({
-          name,
-          email,
-          phoneNumber,
-        });
+      if (role != 'admin') {
+        let customer = await Customer.findOne({ email });
+        if (!customer) {
+          customer = new Customer({
+            name,
+            email,
+            phoneNumber,
+          });
         await customer.save();
+        }
       }
-  
       res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -38,7 +58,20 @@ exports.register = async (req, res) => {
   };
 
 
-exports.login = async (req, res) => {
+exports.loginCustomer = async (req, res) => {
+  // #swagger.tags = ['auth']
+  // #swagger.summary = 'login for customer'
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                emailOrUsername: "",
+                password: "",
+            }
+        }
+  */
   try {
     const { emailOrUsername, password } = req.body;
 
@@ -46,7 +79,48 @@ exports.login = async (req, res) => {
       $or: [{ email: emailOrUsername }, { username: emailOrUsername }]
     });
 
-    if (!user) {
+    if (!user || user.role != 'customer') {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({
+      message: 'Login successful',
+      token
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.loginAdmin = async (req, res) => {
+  // #swagger.tags = ['auth']
+  // #swagger.summary = 'login for admin'
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                emailOrUsername: "",
+                password: "",
+            }
+        }
+  */
+  try {
+    const { emailOrUsername, password } = req.body;
+
+    const user = await User.findOne({
+      $or: [{ email: emailOrUsername }, { username: emailOrUsername }]
+    });
+
+    if (!user || user.role != 'admin') {
       return res.status(404).json({ error: 'User not found' });
     }
 
@@ -67,6 +141,25 @@ exports.login = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+  // #swagger.tags = ['auth']
+  // #swagger.summary = 'update user info'
+  /* 
+  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'category data.',
+            required: true,
+            schema: {
+                username: "",
+                name: "",
+                email: "",
+                password: "",
+                phoneNumber: "",
+                address: "",
+                profileImage: "",
+                role: "",
+            }
+        }
+  */
   try {
     const { address, profileImage } = req.body;
     const user = await User.findByIdAndUpdate(req.params.id, { address, profileImage }, { new: true });
@@ -81,10 +174,18 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-
 exports.getAllUsers = async (req, res) => {
+  // #swagger.tags = ['auth']
+  // #swagger.summary = 'get user list'
   try {
-    const users = await User.find();
+    const { username, email, phoneNumber, name, role} = req.query;
+    const filter = {};
+    if (username) filter.username = username;
+    if (name) filter.name = new RegExp(name, 'i');
+    if (email) filter.email = email;
+    if (phoneNumber) filter.phoneNumber = phoneNumber;
+    if (role) filter.role = role;
+    const users = await User.find(filter);
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -92,6 +193,8 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+  // #swagger.tags = ['auth']
+  // #swagger.summary = 'delete user'
   try {
     const { userId } = req.params;
 
