@@ -1,11 +1,44 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db.js');
+const Branch = require('./Branch');
 
-const EmployeeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  phoneNumber: { type: String, required: true, unique: true },
-  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: true },
-  profileImage: { type: String },
+const Employee = sequelize.define('Employee', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  phoneNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  branch: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Branches', 
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  profileImage: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+}, {
+  timestamps: true,
+  tableName: 'Employees',
 });
 
-module.exports = mongoose.model('Employee', EmployeeSchema);
+Employee.belongsTo(Branch, { foreignKey: 'branch' });
+
+module.exports = Employee;

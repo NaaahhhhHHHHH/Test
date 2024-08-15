@@ -1,17 +1,27 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db.js');
 
-const AboutSchema = new mongoose.Schema({
+const About = sequelize.define('About', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   title: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   content: {
-    type: String,
-    required: true
+    type: DataTypes.TEXT,
+    allowNull: false,
   },
   image: {
-    type: String // URL to the image
+    type: DataTypes.STRING, // URL to the image
+    allowNull: true,
   }
+}, {
+  timestamps: true, 
+  tableName: 'Abouts', 
 });
 
-module.exports = mongoose.model('About', AboutSchema);
+module.exports = About;

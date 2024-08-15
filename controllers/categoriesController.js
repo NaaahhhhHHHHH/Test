@@ -6,20 +6,20 @@ exports.createCategory = async (req, res) => {
   /* 
   #swagger.parameters['body'] = {
             in: 'body',
-            description: 'category data.',
+            description: 'Category data.',
             required: true,
             schema: {
-                title: "",
-                subtitle: "",
-                text: "",
-                url: "",
+                title: "Sample Title",
+                subtitle: "Sample Subtitle",
+                text: "Sample text",
+                url: "http://example.com"
             }
         }
   */
   try {
-    const newCategory = new Category(req.body);
-    const category = await newCategory.save();
-    res.status(201).json(category);
+    const { title, subtitle, text, url } = req.body;
+    const newCategory = await Category.create({ title, subtitle, text, url });
+    res.status(201).json(newCategory);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -29,7 +29,7 @@ exports.createCategory = async (req, res) => {
 exports.getAllCategories = async (req, res) => {
   // #swagger.tags = ['categories']
   try {
-    const categories = await Category.find();
+    const categories = await Category.findAll();
     res.status(200).json(categories);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -42,18 +42,25 @@ exports.updateCategory = async (req, res) => {
   /* 
   #swagger.parameters['body'] = {
             in: 'body',
-            description: 'category data.',
+            description: 'Category data.',
             required: true,
             schema: {
-                title: "",
-                subtitle: "",
-                text: "",
-                url: "",
+                title: "Updated Title",
+                subtitle: "Updated Subtitle",
+                text: "Updated text",
+                url: "http://updated-example.com"
             }
         }
   */
   try {
-    const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { title, subtitle, text, url } = req.body;
+    const category = await Category.findByPk(req.params.id);
+
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    await category.update({ title, subtitle, text, url });
     res.status(200).json(category);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -64,8 +71,14 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
   // #swagger.tags = ['categories']
   try {
-    await Category.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Category deleted' });
+    const category = await Category.findByPk(req.params.id);
+
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    await category.destroy();
+    res.status(200).json({ message: 'Category deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

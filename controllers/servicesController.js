@@ -6,21 +6,21 @@ exports.createService = async (req, res) => {
   /* 
   #swagger.parameters['body'] = {
             in: 'body',
-            description: 'service data.',
+            description: 'Service data.',
             required: true,
             schema: {
-                title: "",
-                subtitle: "",
-                category: "",
-                text: "",
-                url: ""
+                title: "Sample Service",
+                subtitle: "Sample Subtitle",
+                category: 1, // ID c?a category trong c? s? d? li?u
+                text: "Sample text",
+                url: "http://example.com"
             }
         }
   */
   try {
-    const newService = new Service(req.body);
-    const service = await newService.save();
-    res.status(201).json(service);
+    const { title, subtitle, category, text, url } = req.body;
+    const newService = await Service.create({ title, subtitle, category, text, url });
+    res.status(201).json(newService);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,10 +30,11 @@ exports.createService = async (req, res) => {
 exports.getAllServices = async (req, res) => {
   // #swagger.tags = ['services']
   try {
+
     const { category } = req.query;
     const filter = {};
     if (category) filter.category = category;
-    const services = await Service.find().populate('category');
+    const services = await Service.findAll({ where: filter });
     res.status(200).json(services);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -46,19 +47,26 @@ exports.updateService = async (req, res) => {
   /* 
   #swagger.parameters['body'] = {
             in: 'body',
-            description: 'service data.',
+            description: 'Service data.',
             required: true,
             schema: {
-                title: "",
-                subtitle: "",
-                category: "",
-                text: "",
-                url: ""
+                title: "Updated Service",
+                subtitle: "Updated Subtitle",
+                category: 1, // ID c?a category
+                text: "Updated text",
+                url: "http://updated-example.com"
             }
         }
   */
   try {
-    const service = await Service.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { title, subtitle, category, text, url } = req.body;
+    const service = await Service.findByPk(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    await service.update({ title, subtitle, category, text, url });
     res.status(200).json(service);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -69,8 +77,14 @@ exports.updateService = async (req, res) => {
 exports.deleteService = async (req, res) => {
   // #swagger.tags = ['services']
   try {
-    await Service.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Service deleted' });
+    const service = await Service.findByPk(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    await service.destroy();
+    res.status(200).json({ message: 'Service deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

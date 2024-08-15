@@ -16,8 +16,7 @@ exports.createCustomer = async (req, res) => {
         }
   */
   try {
-    const newCustomer = new Customer(req.body);
-    const customer = await newCustomer.save();
+    const customer = await Customer.create(req.body);
     res.status(201).json(customer);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -30,10 +29,12 @@ exports.getAllCustomers = async (req, res) => {
   try {
     const { name, email, phoneNumber } = req.query;
     const filter = {};
-    if (name) filter.name = new RegExp(name, 'i');
+
+    if (name) filter.name = { [Op.iLike]: `%${name}%` };
     if (email) filter.email = email;
     if (phoneNumber) filter.phoneNumber = phoneNumber;
-    const customers = await Customer.find(filter);
+
+    const customers = await Customer.findAll({ where: filter });
     res.status(200).json(customers);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -56,7 +57,11 @@ exports.updateCustomer = async (req, res) => {
         }
   */
   try {
-    const customer = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const customer = await Customer.findByPk(req.params.id);
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+    await customer.update(req.body);
     res.status(200).json(customer);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -67,7 +72,11 @@ exports.updateCustomer = async (req, res) => {
 exports.deleteCustomer = async (req, res) => {
   // #swagger.tags = ['customers']
   try {
-    await Customer.findByIdAndDelete(req.params.id);
+    const customer = await Customer.findByPk(req.params.id);
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+    await customer.destroy();
     res.status(200).json({ message: 'Customer deleted' });
   } catch (err) {
     res.status(500).json({ error: err.message });

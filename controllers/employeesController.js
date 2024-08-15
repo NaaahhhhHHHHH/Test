@@ -18,9 +18,9 @@ exports.createEmployee = async (req, res) => {
         }
   */
   try {
-    const newEmployee = new Employee(req.body);
-    const employee = await newEmployee.save();
-    res.status(201).json(employee);
+    const { name, email, phoneNumber, branch, profileImage } = req.body;
+    const newEmployee = await Employee.create({ name, email, phoneNumber, branch, profileImage });
+    res.status(201).json(newEmployee);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,13 +30,14 @@ exports.createEmployee = async (req, res) => {
 exports.getAllEmployees = async (req, res) => {
   // #swagger.tags = ['employees']
   try {
-    const { branch, email, phoneNumber, name} = req.query;
+    const { branch, email, phoneNumber, name } = req.query;
     const filter = {};
     if (branch) filter.branch = branch;
-    if (name) filter.name = new RegExp(name, 'i');
+    if (name) filter.name = { [Op.iLike]: `%${name}%` };
     if (email) filter.email = email;
     if (phoneNumber) filter.phoneNumber = phoneNumber;
-    const employees = await Employee.find(filter);
+
+    const employees = await Employee.findAll({ where: filter });
     res.status(200).json(employees);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -61,7 +62,14 @@ exports.updateEmployee = async (req, res) => {
         }
   */
   try {
-    const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { name, email, phoneNumber, branch, profileImage } = req.body;
+    const employee = await Employee.findByPk(req.params.id);
+
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    await employee.update({ name, email, phoneNumber, branch, profileImage });
     res.status(200).json(employee);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -72,8 +80,14 @@ exports.updateEmployee = async (req, res) => {
 exports.deleteEmployee = async (req, res) => {
   // #swagger.tags = ['employees']
   try {
-    await Employee.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Employee deleted' });
+    const employee = await Employee.findByPk(req.params.id);
+
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    await employee.destroy();
+    res.status(200).json({ message: 'Employee deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
