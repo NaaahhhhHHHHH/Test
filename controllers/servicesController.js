@@ -11,7 +11,7 @@ exports.createService = async (req, res) => {
             schema: {
                 title: "Sample Service",
                 subtitle: "Sample Subtitle",
-                category: 1, // ID c?a category trong c? s? d? li?u
+                category: 1, 
                 text: "Sample text",
                 url: "http://example.com"
             }
@@ -52,7 +52,7 @@ exports.updateService = async (req, res) => {
             schema: {
                 title: "Updated Service",
                 subtitle: "Updated Subtitle",
-                category: 1, // ID c?a category
+                category: 1, 
                 text: "Updated text",
                 url: "http://updated-example.com"
             }

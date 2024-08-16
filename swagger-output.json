@@ -162,6 +162,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -184,6 +187,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -200,26 +206,26 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "Category data.",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
                   "type": "string",
-                  "example": ""
+                  "example": "Sample Title"
                 },
                 "subtitle": {
                   "type": "string",
-                  "example": ""
+                  "example": "Sample Subtitle"
                 },
                 "text": {
                   "type": "string",
-                  "example": ""
+                  "example": "Sample text"
                 },
                 "url": {
                   "type": "string",
-                  "example": ""
+                  "example": "http://example.com"
                 }
               }
             }
@@ -265,26 +271,26 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "Category data.",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
                   "type": "string",
-                  "example": ""
+                  "example": "Updated Title"
                 },
                 "subtitle": {
                   "type": "string",
-                  "example": ""
+                  "example": "Updated Subtitle"
                 },
                 "text": {
                   "type": "string",
-                  "example": ""
+                  "example": "Updated text"
                 },
                 "url": {
                   "type": "string",
-                  "example": ""
+                  "example": "http://updated-example.com"
                 }
               }
             }
@@ -293,6 +299,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -316,6 +325,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -332,30 +344,30 @@
           {
             "name": "body",
             "in": "body",
-            "description": "service data.",
+            "description": "Service data.",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
                   "type": "string",
-                  "example": ""
+                  "example": "Sample Service"
                 },
                 "subtitle": {
                   "type": "string",
-                  "example": ""
+                  "example": "Sample Subtitle"
                 },
                 "category": {
-                  "type": "string",
-                  "example": ""
+                  "type": "number",
+                  "example": 1
                 },
                 "text": {
                   "type": "string",
-                  "example": ""
+                  "example": "Sample text"
                 },
                 "url": {
                   "type": "string",
-                  "example": ""
+                  "example": "http://example.com"
                 }
               }
             }
@@ -408,30 +420,30 @@
           {
             "name": "body",
             "in": "body",
-            "description": "service data.",
+            "description": "Service data.",
             "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
                   "type": "string",
-                  "example": ""
+                  "example": "Updated Service"
                 },
                 "subtitle": {
                   "type": "string",
-                  "example": ""
+                  "example": "Updated Subtitle"
                 },
                 "category": {
-                  "type": "string",
-                  "example": ""
+                  "type": "number",
+                  "example": 1
                 },
                 "text": {
                   "type": "string",
-                  "example": ""
+                  "example": "Updated text"
                 },
                 "url": {
                   "type": "string",
-                  "example": ""
+                  "example": "http://updated-example.com"
                 }
               }
             }
@@ -440,6 +452,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -463,6 +478,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -472,14 +490,14 @@
     "/api/blogs": {
       "post": {
         "tags": [
-          "blog"
+          "blogs"
         ],
         "description": "",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "blogs data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -519,7 +537,7 @@
       },
       "get": {
         "tags": [
-          "blog"
+          "blogs"
         ],
         "description": "",
         "responses": {
@@ -535,7 +553,7 @@
     "/api/blogs/{id}": {
       "put": {
         "tags": [
-          "blog"
+          "blogs"
         ],
         "description": "",
         "parameters": [
@@ -548,7 +566,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "blogs data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -588,7 +606,7 @@
       },
       "delete": {
         "tags": [
-          "blog"
+          "blogs"
         ],
         "description": "",
         "parameters": [
@@ -619,7 +637,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "about data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -680,7 +698,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "about data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -705,6 +723,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -726,6 +747,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -983,6 +1007,9 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -1004,6 +1031,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1176,7 +1206,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "user data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -1241,7 +1271,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "user data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -1285,7 +1315,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "category data.",
+            "description": "user data.",
             "required": true,
             "schema": {
               "type": "object",
@@ -1318,7 +1348,7 @@
         }
       }
     },
-    "/api/auth/updateUser/{id}": {
+    "/api/auth/updateUser": {
       "put": {
         "tags": [
           "auth"
@@ -1327,9 +1357,8 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "Authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -1340,19 +1369,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "username": {
-                  "type": "string",
-                  "example": ""
-                },
                 "name": {
-                  "type": "string",
-                  "example": ""
-                },
-                "email": {
-                  "type": "string",
-                  "example": ""
-                },
-                "password": {
                   "type": "string",
                   "example": ""
                 },
@@ -1367,8 +1384,56 @@
                 "profileImage": {
                   "type": "string",
                   "example": ""
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/auth/updatePassword": {
+      "put": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "update user password",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "user data.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "currentPassword": {
+                  "type": "string",
+                  "example": ""
                 },
-                "role": {
+                "newPassword": {
                   "type": "string",
                   "example": ""
                 }
@@ -1380,6 +1445,15 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -1389,7 +1463,7 @@
         }
       }
     },
-    "/api/auth/deleteUser/{id}": {
+    "/api/auth/deleteUser": {
       "delete": {
         "tags": [
           "auth"
@@ -1398,15 +1472,20 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "Authorization",
+            "in": "header",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
@@ -1425,6 +1504,11 @@
         "summary": "get user list",
         "description": "",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "username",
             "in": "query",
@@ -1454,6 +1538,12 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"

@@ -22,7 +22,7 @@ app.use('/', require('./routes/about'));
 // app.use('/', require('./routes/gallery'));
 app.use('/', require('./routes/employees'));
 app.use('/', require('./routes/branches'));
-// app.use('/', authRoutes);
+app.use('/', authRoutes);
 
 sequelize.sync({ force: false })
   .then(() => {
