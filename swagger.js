@@ -17,6 +17,7 @@ const doc = {
     { name: 'employees', description: 'API for managing employees' },
     { name: 'branches', description: 'API for managing branches' },
     { name: 'auth', description: 'API for managing auth' },
+    { name: 'appointments', description: 'API for managing appointments' },
   ],
 };
 
@@ -31,6 +32,7 @@ const routes = [
     './routes/employees.js',
     './routes/branches.js',
     './routes/auth.js',
+    './routes/appointments.js',
 ];
 
 swaggerAutogen(outputFile, routes, doc);

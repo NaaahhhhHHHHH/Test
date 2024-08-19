@@ -1,13 +1,17 @@
+const { Op } = require('sequelize');
 const Appointment = require('../models/Appointment');
 const User = require('../models/User');
 const Customer = require('../models/Customer');
+// const Service = require('../models/Service');
+// const Employee = require('../models/Employee');
+// const Branch = require('../models/Branch');
 
 exports.createAppointment = async (req, res) => {
-  // #swagger.tags = ['appointment']
+  // #swagger.tags = ['appointments']
   /* 
   #swagger.parameters['body'] = {
             in: 'body',
-            description: 'category data.',
+            description: 'Appointment data.',
             required: true,
             schema: {
                 userId: "",
@@ -27,60 +31,59 @@ exports.createAppointment = async (req, res) => {
     let user;
 
     if (userId) {
-      user = await User.findById(userId);
+      user = await User.findByPk(userId);
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      customer = await Customer.findOne({ email: user.email });
+      customer = await Customer.findOne({ where: { email: user.email } });
       if (!customer) {
-        customer = new Customer({
+        customer = await Customer.create({
           name: user.name,
           email: user.email,
           phoneNumber: user.phoneNumber,
         });
-        await customer.save();
       }
     } else {
-      customer = await Customer.findOne({ email });
+      customer = await Customer.findOne({ where: { email } });
       if (!customer) {
-        customer = new Customer({ name, email, phoneNumber });
-        await customer.save();
+        customer = await Customer.create({ name, email, phoneNumber });
       }
     }
 
-    const newAppointment = new Appointment({
-      user: userId ? userId : undefined,
-      name: userId ? user.name : name, 
+    const newAppointment = await Appointment.create({
+      userId: userId || null,
+      name: userId ? user.name : name,
       email: userId ? user.email : email,
-      phoneNumber: userId ? user.phoneNumber : phoneNumber, 
-      service: service,
-      employee: employee,
-      branch: branch,
+      phoneNumber: userId ? user.phoneNumber : phoneNumber,
+      service,
+      employee: employee || null,
+      branch,
       timeslot,
     });
 
-    await newAppointment.save();
-
-    res.status(201).json({ message: 'Appointment created successfully', newAppointment });
+    res.status(201).json({ message: 'Appointment created successfully', appointment: newAppointment });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 exports.getAllAppointments = async (req, res) => {
-  // #swagger.tags = ['appointment']
+  // #swagger.tags = ['appointments']
   try {
     const { userId, service, employee, phoneNumber, name, branch, timeslot } = req.query;
     const filter = {};
     if (userId) filter.userId = userId;
-    if (name) filter.name = new RegExp(name, 'i');
+    if (name) filter.name = { [Op.iLike]: `%${name}%` };
     if (service) filter.service = service;
     if (employee) filter.employee = employee;
     if (branch) filter.branch = branch;
     if (timeslot) filter.timeslot = timeslot;
     if (phoneNumber) filter.phoneNumber = phoneNumber;
-    const appointments = await Appointment.find(filter).populate('service employee branch');
+
+    const appointments = await Appointment.findAll({
+      where: filter
+    });
     res.status(200).json(appointments);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -88,11 +91,11 @@ exports.getAllAppointments = async (req, res) => {
 };
 
 exports.updateAppointment = async (req, res) => {
-  // #swagger.tags = ['appointment']
+  // #swagger.tags = ['appointments']
   /* 
   #swagger.parameters['body'] = {
             in: 'body',
-            description: 'category data.',
+            description: 'Appointment data.',
             required: true,
             schema: {
                 userId: "",
@@ -107,28 +110,39 @@ exports.updateAppointment = async (req, res) => {
         }
   */
   try {
-    const { customerId, name, email, phoneNumber, service, employee, branch, timeslot } = req.body;
-    const appointment = await Appointment.findByIdAndUpdate(req.params.id, { customer: customerId, name, email, phoneNumber, service: service, employee: employee, branch: branch, timeslot }, { new: true });
+    const { name, email, phoneNumber, service, employee, branch, timeslot } = req.body;
+    const appointment = await Appointment.findByPk(req.params.id);
 
     if (!appointment) {
       return res.status(404).json({ error: 'Appointment not found' });
     }
 
-    res.status(200).json(appointment);
+    await appointment.update({
+      name,
+      email,
+      phoneNumber,
+      service,
+      employee: employee || null,
+      branch,
+      timeslot,
+    });
+
+    res.status(200).json({ message: 'Appointment updated successfully', appointment });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 exports.deleteAppointment = async (req, res) => {
-  // #swagger.tags = ['appointment']
+  // #swagger.tags = ['appointments']
   try {
-    const appointment = await Appointment.findByIdAndDelete(req.params.id);
+    const appointment = await Appointment.findByPk(req.params.id);
 
     if (!appointment) {
       return res.status(404).json({ error: 'Appointment not found' });
     }
 
+    await appointment.destroy();
     res.status(200).json({ message: 'Appointment deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

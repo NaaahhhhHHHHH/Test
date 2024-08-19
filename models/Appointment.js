@@ -1,18 +1,73 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db.js');
+const User = require('./User');
+const Service = require('./Service');
+const Employee = require('./Employee');
+const Branch = require('./Branch');
 
-const AppointmentSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: false
+const Appointment = sequelize.define('Appointment', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
   },
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
-  employee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee', required: false }, 
-  branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', required: true },
-  timeslot: { type: Date, required: true }
+  userId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id',
+    },
+    allowNull: true, 
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phoneNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  service: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Service,
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  employee: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Employee,
+      key: 'id',
+    },
+    allowNull: true,
+  },
+  branch: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Branch,
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  timeslot: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+}, {
+  timestamps: true,
+  tableName: 'Appointments',
 });
 
-module.exports = mongoose.model('Appointment', AppointmentSchema);
+// Define associations
+Appointment.belongsTo(User, { foreignKey: 'userId' });
+Appointment.belongsTo(Service, { foreignKey: 'service' });
+Appointment.belongsTo(Employee, { foreignKey: 'employee' });
+Appointment.belongsTo(Branch, { foreignKey: 'branch' });
+
+module.exports = Appointment;

@@ -1,4 +1,5 @@
 const Employee = require('../models/Employee');
+const { Op } = require('sequelize');
 
 // Create a new employee
 exports.createEmployee = async (req, res) => {

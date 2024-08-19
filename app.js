@@ -16,7 +16,7 @@ app.use(express.json());
 app.use('/', require('./routes/customers'));
 app.use('/', require('./routes/categories'));
 app.use('/', require('./routes/services'));
-// app.use('/', require('./routes/appointments'));
+app.use('/', require('./routes/appointments'));
 // app.use('/', require('./routes/blogs'));
 app.use('/', require('./routes/about'));
 // app.use('/', require('./routes/gallery'));

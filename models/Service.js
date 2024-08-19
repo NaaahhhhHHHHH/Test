@@ -3,6 +3,11 @@ const { sequelize } = require('../config/db.js');
 const Category = require('./Category.js');
 
 const Service = sequelize.define('Service', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: false,

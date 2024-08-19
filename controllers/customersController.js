@@ -1,4 +1,5 @@
 const Customer = require('../models/Customer');
+const { Op } = require('sequelize');
 
 // Create a new customer
 exports.createCustomer = async (req, res) => {
