@@ -20,7 +20,7 @@ const Employee = sequelize.define('Employee', {
   phoneNumber: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   branch: {
     type: DataTypes.INTEGER,

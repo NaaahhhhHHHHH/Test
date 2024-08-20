@@ -1,4 +1,5 @@
 const express = require('express');
+const authenticateToken = require('../middleware/authMiddleware');
 const router = express.Router();
 const {
   createBlog,
@@ -7,9 +8,9 @@ const {
   deleteBlog
 } = require('../controllers/blogsController');
 
-router.post('/api/blogs', createBlog);
+router.post('/api/blogs', authenticateToken, createBlog);
 router.get('/api/blogs', getAllBlogs);
-router.put('/api/blogs/:id', updateBlog);
-router.delete('/api/blogs/:id', deleteBlog);
+router.put('/api/blogs/:id', authenticateToken, updateBlog);
+router.delete('/api/blogs/:id', authenticateToken, deleteBlog);
 
 module.exports = router;

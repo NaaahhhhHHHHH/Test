@@ -8,9 +8,9 @@ const {
   deleteAppointment
 } = require('../controllers/appointmentsController');
 
-router.post('/api/appointments', createAppointment);
-router.get('/api/appointments', getAllAppointments);
-router.put('/api/appointments/:id', updateAppointment);
-router.delete('/api/appointments/:id', deleteAppointment);
+router.post('/api/appointments', authenticateToken, createAppointment);
+router.get('/api/appointments', authenticateToken, getAllAppointments);
+router.put('/api/appointments/:id', authenticateToken, updateAppointment);
+router.delete('/api/appointments/:id', authenticateToken, deleteAppointment);
 
 module.exports = router;

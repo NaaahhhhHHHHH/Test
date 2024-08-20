@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middleware/authMiddleware');
 const {
   createCustomer,
   getAllCustomers,
@@ -7,9 +8,9 @@ const {
   deleteCustomer
 } = require('../controllers/customersController');
 
-router.post('/api/customers', createCustomer);
-router.get('/api/customers', getAllCustomers);
-router.put('/api/customers/:id', updateCustomer);
-router.delete('/api/customers/:id', deleteCustomer);
+router.post('/api/customers', authenticateToken, createCustomer);
+router.get('/api/customers', authenticateToken, getAllCustomers);
+router.put('/api/customers/:id', authenticateToken, updateCustomer);
+router.delete('/api/customers/:id', authenticateToken, deleteCustomer);
 
 module.exports = router;

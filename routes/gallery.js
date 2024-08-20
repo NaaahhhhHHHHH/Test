@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middleware/authMiddleware');
 const {
   createGalleryItem,
   getAllGalleryItems,
@@ -7,9 +8,9 @@ const {
   deleteGalleryItem
 } = require('../controllers/galleryController');
 
-router.post('/api/gallery', createGalleryItem);
+router.post('/api/gallery', authenticateToken, createGalleryItem);
 router.get('/api/gallery', getAllGalleryItems);
-router.put('/api/gallery/:id', updateGalleryItem);
-router.delete('/api/gallery/:id', deleteGalleryItem);
+router.put('/api/gallery/:id', authenticateToken, updateGalleryItem);
+router.delete('/api/gallery/:id', authenticateToken, deleteGalleryItem);
 
 module.exports = router;

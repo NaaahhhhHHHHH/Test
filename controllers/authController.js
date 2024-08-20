@@ -100,7 +100,9 @@ exports.loginCustomer = async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-      token
+      token,
+      userId: user.id,
+      role: user.role,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -144,7 +146,9 @@ exports.loginAdmin = async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-      token
+      token,
+      userId: user.id,
+      role: user.role,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -171,7 +175,7 @@ exports.updateUser = async (req, res) => {
     const { address, profileImage, name, phoneNumber } = req.body;
     const user = await User.update(
       { address, profileImage, name, phoneNumber },
-      { where: { id: req.user.id }, returning: true }
+      { where: { id: req.params.id }, returning: true }
     );
 
     if (!user[0]) {
@@ -201,7 +205,7 @@ exports.updatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.params.id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -244,7 +248,7 @@ exports.deleteUser = async (req, res) => {
   // #swagger.tags = ['auth']
   // #swagger.summary = 'delete user'
   try {
-    const id = req.user.id;
+    const id = req.params.id;
 
     const user = await User.findByPk(id);
     if (!user) {
