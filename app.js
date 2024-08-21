@@ -13,16 +13,16 @@ connectDB();
 app.use(express.json());
 
 // Define Routes
-app.use('/', require('./routes/customers'));
-app.use('/', require('./routes/categories'));
-app.use('/', require('./routes/services'));
-app.use('/', require('./routes/appointments'));
-app.use('/', require('./routes/blogs'));
-app.use('/', require('./routes/about'));
-app.use('/', require('./routes/gallery'));
-app.use('/', require('./routes/employees'));
-app.use('/', require('./routes/branches'));
-app.use('/', authRoutes);
+app.use('/beautyBooking/', require('./routes/customers'));
+app.use('/beautyBooking/', require('./routes/categories'));
+app.use('/beautyBooking/', require('./routes/services'));
+app.use('/beautyBooking/', require('./routes/appointments'));
+app.use('/beautyBooking/', require('./routes/blogs'));
+app.use('/beautyBooking/', require('./routes/about'));
+app.use('/beautyBooking/', require('./routes/gallery'));
+app.use('/beautyBooking/', require('./routes/employees'));
+app.use('/beautyBooking/', require('./routes/branches'));
+app.use('/beautyBooking/', authRoutes);
 
 sequelize.sync({ force: false })
   .then(() => {
@@ -33,5 +33,5 @@ sequelize.sync({ force: false })
   });
 
 const PORT = process.env.PORT || 5000;
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-beauty-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

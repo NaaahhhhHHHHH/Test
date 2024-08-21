@@ -23,16 +23,17 @@ const doc = {
 
 const outputFile = './swagger-output.json';
 const routes = [
-    './routes/customers.js',
-    './routes/categories.js',
-    './routes/services.js',
-    './routes/blogs.js',
-    './routes/about.js',
-    './routes/gallery.js',
-    './routes/employees.js',
-    './routes/branches.js',
-    './routes/auth.js',
-    './routes/appointments.js',
+    './app.js'
+    // './routes/customers.js',
+    // './routes/categories.js',
+    // './routes/services.js',
+    // './routes/blogs.js',
+    // './routes/about.js',
+    // './routes/gallery.js',
+    // './routes/employees.js',
+    // './routes/branches.js',
+    // './routes/auth.js',
+    // './routes/appointments.js',
 ];
 
 swaggerAutogen(outputFile, routes, doc);
