@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
+  const authHeader = req.header('Authorization');
+  const token = authHeader ? authHeader.replace('Bearer ', '') : '';
   if (!token) {
     //Appointments permission valid in appointmentsController.js
     if (req.url.includes('appointments')) {
